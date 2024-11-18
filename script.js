@@ -1,12 +1,12 @@
 $(document).ready(function() {
     // Función para mostrar mensajes con SweetAlert
-    const showAlert = (icon, title, text) => {
-        Swal.fire({ icon, title, text });
+    const mostrarAlerta = (icono, titulo, texto) => {
+        Swal.fire({ icon: icono, title: titulo, text: texto });
     };
 
     // Función para convertir JS a jQuery de manera dinámica
-    const convertJStoJQuery = (jsCode) => {
-        const replacements = [
+    const convertirJStoJQuery = (codigoJS) => {
+        const reemplazos = [
             { regex: /addEventListener\(['"](.+?)['"],/g, replacement: '.on("$1",'},
             { regex: /document\.getElementById\(['"](.+?)['"]\)/g, replacement: '$("$1")' },
             { regex: /document\.querySelector\(['"](.+?)['"]\)/g, replacement: '$("$1")' },
@@ -21,28 +21,28 @@ $(document).ready(function() {
         ];
 
         // Aplicar todos los reemplazos
-        replacements.forEach(rep => {
-            jsCode = jsCode.replace(rep.regex, rep.replacement);
+        reemplazos.forEach(rep => {
+            codigoJS = codigoJS.replace(rep.regex, rep.replacement);
         });
 
-        return jsCode;
+        return codigoJS;
     };
 
     // Botón para convertir el código
     $('#convert-btn').click(function() {
-        const jsCode = $('#js-code').val();
+        const codigoJS = $('#js-code').val();
 
         try {
             // Validar sintaxis del código JavaScript
-            new Function(jsCode);
+            new Function(codigoJS);
             
             // Convertir código JS a jQuery
-            const jqueryCode = convertJStoJQuery(jsCode);
-            $('#jquery-output').val(jqueryCode);
+            const codigoJQuery = convertirJStoJQuery(codigoJS);
+            $('#jquery-output').val(codigoJQuery);
 
-            showAlert('success', 'Conversión exitosa', 'El código se ha convertido correctamente a jQuery.');
+            mostrarAlerta('success', 'Conversión exitosa', 'El código se ha convertido correctamente a jQuery.');
         } catch (error) {
-            showAlert('error', 'Error de sintaxis', `Error en el código JavaScript: ${error.message}`);
+            mostrarAlerta('error', 'Error de sintaxis', `Error en el código JavaScript: ${error.message}`);
         }
     });
 
@@ -50,16 +50,16 @@ $(document).ready(function() {
     $('#clear-btn').click(function() {
         $('#js-code').val('');
         $('#jquery-output').val('');
-        showAlert('info', 'Campos limpiados', 'Los campos se han limpiado correctamente.');
+        mostrarAlerta('info', 'Campos limpiados', 'Los campos se han limpiado correctamente.');
     });
 
     // Función para copiar al portapapeles
     $('#copy-btn').click(function() {
-        const copyText = $('#jquery-output')[0];
+        const textoCopiado = $('#jquery-output')[0];
 
         // Seleccionar y copiar al portapapeles
-        copyText.select();
+        textoCopiado.select();
         document.execCommand("copy");
-        showAlert('success', 'Copiado', 'Código copiado al portapapeles!');
+        mostrarAlerta('success', 'Copiado', 'Código copiado al portapapeles!');
     });
 });
